@@ -4,15 +4,14 @@ import './App.css';
 import Tone from 'tone';
 
 var chromaticScale4 = ["C4", "C#4", "D4", "D#4", "E4", "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4"];
-
-var theClass = 'zero-color';
+var colorWheel = ["red", "orange", "yellow", "chartreuse_green", "green", "spring_green", "cyan", "azure", "blue", "violet", "magenta", "rose"];
 
 class App extends Component {
   constructor(){
     super();
 
     this.state = {
-        className: 'zero-color'
+        className: 'red'
     }
 }
 
@@ -34,19 +33,12 @@ class App extends Component {
 
     Tone.Transport.scheduleRepeat(function(time){
       console.warn('in the callback', self.state.className);
-      if (self.state.className === 'zero-color') {
-        self.setState({className: 'first-color'});
-        console.warn('first');
-      } else if (self.state.className === 'first-color') {
-        self.setState({className: 'second-color'});
-        console.warn('second');
-      } else if (self.state.className === 'second-color') {
-        self.setState({className: 'third-color'});
-        console.warn('third');
-      } else if (self.state.className === 'third-color') {
-        self.setState({className: 'zero-color'});
-        console.warn('zero');
-      }
+
+      let currentIndex = colorWheel.indexOf(self.state.className);
+      if (currentIndex === 11) { currentIndex = -1;}
+      currentIndex++;
+      self.setState({className: colorWheel[currentIndex]});
+
     }, "4n", 0, "12m");
 
 
@@ -56,20 +48,13 @@ class App extends Component {
   }
 
   render() {
-    console.warn(theClass);
-    // this.className = theClass;
+
     let bg_color = this.state.className;
-    // this.makeTone();
+
     return (
-      <div className="App">
-        <header className={bg_color}>
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-
-            <button onClick={this.makeTone.bind(this)}>Make tone</button>
-
+      <div className="app">
+        <header className={'app-header ' + bg_color}>
+          <img src={logo} className="app-logo" alt="logo" onClick={this.makeTone.bind(this)}/>
         </header>
       </div>
     );
