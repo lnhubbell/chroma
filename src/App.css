@@ -3,8 +3,10 @@
 }
 
 .app-logo {
-  animation: App-logo-spin infinite 20s linear;
+  animation: App-logo-spin infinite 120s linear;
   height: 40vmin;
+  color: black;
+  /* background-color: black; */
 }
 
 .app-header {

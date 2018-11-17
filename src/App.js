@@ -39,7 +39,7 @@ class App extends Component {
       currentIndex++;
       self.setState({className: colorWheel[currentIndex]});
 
-    }, "4n", 0, "12m");
+    }, "1n", "1n", "12m");
 
 
 
