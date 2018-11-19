@@ -3,9 +3,11 @@
 }
 
 .app-logo {
-  animation: App-logo-spin infinite 120s linear;
-  height: 40vmin;
+  /*animation: App-logo-spin infinite 10s linear;*/
+  /*height: 40vmin;*/
+  font-size: 200px;
   color: black;
+  font-weight: bold;
   /* background-color: black; */
 }
 
