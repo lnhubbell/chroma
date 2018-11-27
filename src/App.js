@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Tone from 'tone';
+import WebMidi from 'webmidi';
 
 var chromaticScale4 = [
   "C3",
@@ -158,6 +159,10 @@ function shuffle(array) {
   return array;
 }
 
+
+
+
+
 class App extends Component {
   constructor(){
     super();
@@ -167,6 +172,57 @@ class App extends Component {
         noteName: 'Click Me',
         bg_color_style: {'backgroundColor': 'rgb(255, 255, 255)'}
     }
+    this.testMidi();
+  }
+
+
+  testMidiOld() {
+    // console.warn('clicked');
+    WebMidi.enable(function (err) {
+      if (err) {
+        console.warn("WebMidi could not be enabled.", err);
+      } else {
+        console.warn("WebMidi enabled!");
+        console.log(WebMidi.inputs);
+        console.log(WebMidi.outputs);
+        // WebMidi.outputs[0].playNote("C3");
+
+        var input = WebMidi.inputs[0];
+
+        // Listen for a 'note on' message on all channels
+        input.addListener('noteon', "all",
+          function (e) {
+            let numb = e.data[1] !== 0 ? e.data[1] : e.data[2];
+            console.warn('the NUmber: ', numb)
+            console.log("Received 'noteon' message (" + e.note.name + e.note.octave + ").");
+            console.log('event', e);
+          }
+        );
+        // input.addListener('noteoff', "all",
+        //   function (e) {
+        //     console.log("Received 'noteoff' message (" + e.note.name + e.note.octave + ").");
+        //     console.log('event', e);
+        //   }
+        // );
+      }
+    });
+  }
+
+
+  testMidi() {
+    navigator.requestMIDIAccess().then( function (midiAccess) {
+        for (var input of midiAccess.inputs.values())
+            input.onmidimessage = function (midiMessage) {
+              if (midiMessage.data[0] === 144) {
+                console.log(midiMessage.data)
+              }
+
+            } ;
+        }
+    , function () {
+        console.log('Could not access your MIDI devices.');
+    });
+
   }
 
   makeTone() {
@@ -228,6 +284,7 @@ class App extends Component {
 
     return (
       <div className="app">
+        <script src="https://cdn.jsdelivr.net/npm/webmidi"></script>
         <header className={'app-header'} style={this.state.bg_color_style}>
           <div className="app-logo" onClick={this.makeTone.bind(this)}>{this.state.noteName}</div>
         </header>
